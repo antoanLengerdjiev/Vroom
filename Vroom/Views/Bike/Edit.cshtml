@@ -1,0 +1,121 @@
+﻿@model Vroom.Models.CreateBikeViewModel
+@using Vroom.Extensions
+<br />
+<h2 class="text-info">Add Model of Vehicle</h2>
+<form action="Edit" enctype="multipart/form-data" method="post">
+    <input hidden asp-for="Bike.Id" />
+    <input hidden asp-for="Bike.ImagePath" />
+    @Html.AntiForgeryToken()
+    <div class="form-group row">
+        <div class="col-2">
+            <label asp-for="Makes"></label>
+        </div>
+        <div class="col-4">
+            <select asp-for="Bike.MakeId" asp-items="Model.Makes" class="form-control" id="makeSelect"></select>
+            <span asp-validation-for="Bike.MakeId" class="text-danger"></span>
+        </div>
+        <div class="col-auto">
+            <label asp-for="Bike.ImagePath"></label>
+        </div>
+        <div class="col-4">
+            <input type="file" name="files" class="form-control" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-2">
+            <label asp-for="Models"></label>
+        </div>
+        <div class="col-4">
+            <select asp-for="Bike.ModelId" asp-items="Model.Models" class="form-control" id="modelSelect"></select>
+            <span asp-validation-for="Bike.ModelId" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-2">
+            <label asp-for="Bike.Year"></label>
+        </div>
+        <div class="col-4">
+            <input asp-for="Bike.Year" class="form-control" />
+            <span asp-validation-for="Bike.Year" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-2">
+            <label asp-for="Bike.Mileage"></label>
+        </div>
+        <div class="col-4">
+            <input asp-for="Bike.Mileage" class="form-control" />
+            <span asp-validation-for="Bike.Mileage" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-2">
+            <label asp-for="Bike.Price"></label>
+        </div>
+        <div class="col-4">
+            <input asp-for="Bike.Price" class="form-control" />
+            <span asp-validation-for="Bike.Price" class="text-danger"></span>
+        </div>
+        <div class="col-1">
+            <label asp-for="Bike.Currency"></label>
+        </div>
+        <div class="col-4">
+            <select asp-for="Bike.Currency" asp-items="Model.Currencies.ToSelectItemsList()" class="form-control"></select>
+            <span asp-validation-for="Bike.Currency" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-2">
+            <label asp-for="Bike.Features"></label>
+        </div>
+        <div class="col-4">
+            <textarea asp-for="Bike.Features" class="form-control"></textarea>
+            <span asp-validation-for="Bike.Features" class="text-danger"></span>
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+        <input type="submit" class="btn btn-primary" value="Update" />
+        <a asp-action="Index" class="btn btn-success">Back</a>
+    </div>
+</form>
+@section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function () {
+
+            var makeDDL = $("#makeSelect");
+            var modelDDL = $("#modelSelect");
+            var list = modelDDL.children();
+            //modelDDL.prop("disabled", true);
+
+            makeDDL.change(function () {
+                if ($(this).val() != "0") {
+                    modelDDL.prop("disabled", false);
+                    modelDDL.val("0");
+                    $.ajax({
+                        url: "/api/models/" + $(this).val(),
+                        method: "get",
+                        success: function (data) {
+                            modelDDL.empty();
+                            modelDDL.append($("<option/>", { value: "0", text: "--Select Model--" }));
+
+                            for (let item of data) {
+                                modelDDL.append($("<option/>", { value: item.id, text: item.name }));
+                            }
+                        }
+                    })
+                }
+                else {
+                    modelDDL.prop("disabled", true);
+                    for (let opt of list) {
+                        $(opt).show();
+                    }
+                }
+            });
+
+        });
+    </script>
+}

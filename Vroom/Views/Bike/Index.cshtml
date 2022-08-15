@@ -1,0 +1,56 @@
+﻿
+@{
+    ViewData["Controller"] = "Bike";
+    ViewData["Action"] = "Index";
+    ViewData["Replace"] = "#bikeInfo";
+}
+@using Vroom.Helpers
+@model  cloudscribe.Pagination.Models.PagedResult<BikeViewModel>
+
+<br />
+<br />
+<div id="overlay" style="display: none;"></div>
+<form asp-action="Index" method="get" data-ajax="true" data-ajax-complete="HideLoadingScreen" data-ajax-begin="ShowLoadingScreen" data-ajax-mode="replace" data-ajax-loading="#spinner" data-ajax-update="@ViewData["replace"]" asp-route-sortOrder="@ViewBag.CurrentSortOrder">
+    <div>
+        <p>
+            Find Make: <input type="text" name="searchString" value="@ViewBag.CurrentSearchString" />
+            <input type="submit" value="Search" class="btn btn-info" />
+            <a asp-action="Index">Remove Filter</a>
+        </p>
+    </div>
+
+</form>
+<div class="row">
+    <div class="col-6">
+        <h2 class="text-info">Bikes</h2>
+    </div>
+    @if (User.IsInRole(Roles.Admin) || User.IsInRole(Roles.Executive))
+    {
+        <div class="col-6 text-right">
+            <a class="btn btn-info" asp-action="Create"><i class="fa-light fa-bicycle"></i> &nbsp; Add New Bike</a>
+        </div>
+    }
+    <br />
+    <div id="spinner" class="text-center" style="display: none;">
+        <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    <div class="col-12" id="bikeInfo">
+        <partial name="_PagedRequestPartial" model="@Model" />
+    </div>
+</div>
+@section Scripts{
+    <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.js"></script>
+    <script>
+
+        function ShowLoadingScreen() {
+            $("#overlay").show();
+        }
+
+        function HideLoadingScreen() {
+            $("#overlay").hide();
+        }
+
+    </script>
+}

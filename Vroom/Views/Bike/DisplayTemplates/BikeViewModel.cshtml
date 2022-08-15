@@ -1,0 +1,19 @@
+﻿@model BikeViewModel
+
+
+<td>
+    <img src="@Html.DisplayFor(m => Model.ImagePath)" width="150px" height="100px" />
+</td>
+<td>
+    <b>@Html.DisplayFor(m => Model.Model.Make.Name) (@Html.DisplayFor(m => Model.Year))</b> <br />
+    <b>Model: </b>@Html.DisplayFor(m => Model.Model.Name) <br />
+    <b>Mileage: </b>@Html.DisplayFor(m => Model.Mileage)
+</td>
+<td>
+    @Html.DisplayFor(m => Model.Price) @Html.DisplayFor(m => Model.Currency)
+</td>
+<td>
+    <b>Name: </b>@Html.DisplayFor(m => Model.Seller.UserName)<br />
+    <b>Email: </b>@Html.DisplayFor(m => Model.Seller.Email)<br />
+    <b>Phone: </b>@Html.DisplayFor(m => Model.Seller.PhoneNumber)<br />
+</td>

@@ -1,0 +1,108 @@
+﻿@{
+    ViewData["Controller"] = "User";
+    ViewData["Action"] = "Index";
+}
+@model  cloudscribe.Pagination.Models.PagedResult<Vroom.Areas.Administration.Models.IndexAppUsersViewModel>
+    <br />
+    <br />
+
+    <div class="row">
+        <div class="col-6">
+            <h2 class="text-info">Makes of Vehicle</h2>
+        </div>
+        <div class="col-6 text-right">
+            <a class="btn btn-info" asp-action="Create"><i class="fa-light fa-bicycle"></i> &nbsp; Add New Make </a>
+        </div>
+        <br />
+        <div class="col-12">
+            <h2>Admins</h2>
+            <table class="table table-striped border">
+                <tr class="table-info">
+                    <th>
+                        UserName
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                    <th>
+                        Phone
+                    </th>
+                    <th>
+                        Is Admin
+                    </th>
+                    <th></th>
+                </tr>
+                @foreach (var item in Model.Data[0].Admins)
+                {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(m => item.UserName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(m => item.Email)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(m => item.PhoneNumber)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(m => item.IsAdmin)
+                        <form method="post" action="Update">
+                            <button type="submit" onclick="if (!confirm('are you sure you want to Update this User Role')){ return false; }" class="btn btn-danger rounded-0" asp-action="Update" asp-route-id="@item.Id" asp-route-isAdmin="@item.IsAdmin"><i class="fa-regular fa-trash-can"></i></button>
+                        </form>
+                    </td>
+                </tr>
+                }
+            </table>
+        </div>
+        <div class="col-12">
+            <h2>Users</h2>
+            <form asp-action="Index" asp-controller="User" asp-area="Administration" asp-route-pageNumber="@Model.PageNumber" asp-route-sortOrder="@ViewBag.CurrentSortOrder" method="get">
+                <input type="search" name="searchString" value="@ViewBag.CurrentSearchString" />
+                <input type="submit" value="Search" />
+                <a asp-action="Index" asp-controller="User" asp-area="Administration">Remove Filter</a>
+            </form>
+            <table class="table table-striped border">
+                <tr class="table-info">
+                    <th>
+                        <a asp-action="Index" asp-controller="User" asp-area="Administration" asp-route-sortOrder="@ViewBag.SortOrderParam" asp-route-pageNumber="@Model.PageNumber" asp-route-searchString="@ViewBag.CurrentSearchString">UserName</a>
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                    <th>
+                        Phone
+                    </th>
+                    <th>
+                        Is Admin
+                    </th>
+                    <th></th>
+                </tr>
+                @foreach (var item in Model.Data[0].Users)
+                {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(m => item.UserName)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(m => item.Email)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(m => item.PhoneNumber)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(m => item.IsAdmin)
+                        <form method="post" action="Update">
+                            <button type="submit" onclick="if (!confirm('are you sure you want to Update this User Role')){ return false; }" class="btn btn-danger rounded-0" asp-action="Update" asp-route-id="@item.Id" asp-route-isAdmin="@item.IsAdmin"><i class="fa-regular fa-trash-can"></i></button>
+                        </form>
+                    </td>
+                </tr>
+                }
+            </table>
+            <partial name="_PaginationPartial" model="Model" />
+        </div>
+    </div>

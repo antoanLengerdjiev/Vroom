@@ -1,0 +1,39 @@
+﻿@model cloudscribe.Pagination.Models.PagedResult<BikeViewModel>
+@using Vroom.Helpers
+<table class="table table-striped border">
+    <tr class="table-info">
+        <th>Bike Name</th>
+        <th>Bike Detail</th>
+        <th><a data-ajax="true" data-ajax-mode="replace" data-ajax-complete="HideLoadingScreen" data-ajax-begin="ShowLoadingScreen" data-ajax-loading="#spinner" data-ajax-update="@ViewData["replace"]" asp-action="Index" asp-route-sortOrder="@ViewBag.PriceSortParam" asp-route-pageNumber="@Model.PageNumber" asp-route-searchString="@ViewBag.CurrentSearchString">Price</a></th>
+        <th>Seller Information</th>
+        @if (User.IsInRole(Roles.Admin) || User.IsInRole(Roles.Executive))
+        {
+            <th></th>
+        }
+        else
+        {
+            <th class="text-right">View Details</th>
+        }
+    </tr>
+    @foreach (var item in Model.Data)
+    {
+        <tr>
+            @Html.DisplayFor(x => item)
+            @if (User.IsInRole(Roles.Admin) || User.IsInRole(Roles.Executive))
+            {
+                <partial name="_TableButtonPartial" model="item.Id" />
+            }
+            else
+            {
+                <td class="text-right">
+                    <div class="btn-group" role="group">
+                        <a type="button" class="btn btn-primary" asp-action="ViewBike" asp-route-id="@item.Id"><i class="fa-solid fa-magnifying-glass"></i></a>
+                    </div>
+                </td>
+            }
+        </tr>
+
+    }
+</table>
+<partial name="_AjaxPaginationPartial" model="Model" />
+
