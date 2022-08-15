@@ -183,6 +183,7 @@ namespace Vroom.Controllers
             var bikeViewModel = this.mapper.Map<BikeServiceModel, BikeViewModel>(model);
             var makeList = this.mapper.Map<List<MakeServiceModel>, List<MakeViewModel>>(this.makeService.GetAll().ToList());
             var modelList = this.mapper.Map<List<ModelServiceModel>, List<ModelViewModel>>(this.modelService.GetAll(model.Model.MakeId).ToList());
+            // TO DO Factory
             var createModel = new CreateBikeViewModel() { Makes = this.selectedItemFactory.GetSelectList(makeList, bikeViewModel.MakeId), Models = this.selectedItemFactory.GetSelectList(modelList, bikeViewModel.ModelId), Bike = bikeViewModel };
 
             return this.View(createModel);
